@@ -1,0 +1,34 @@
+﻿@model List<WebSSU.Models.User>
+
+<div class="row">
+    <div class="col-md-16">
+        <a asp-action="ExportToExcel" asp-controller="Users" class="btn btn-primary">Export to Excel</a>
+    </div>
+    <div class="col-md-16">
+        <a asp-action="BatchUserUpload" asp-controller="Users" class="btn btn-primary">Import from Excel</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

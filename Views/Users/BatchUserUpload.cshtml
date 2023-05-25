@@ -1,0 +1,55 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <form asp-action="BatchUserUpload" asp-controller="Users" method="post" id="create-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="control-label">
+                    Upload File:
+                </label>
+                <input id="batchUsers" name="batchUsers" class="form-control" type="file" tabindex="14">
+                <label class="control-label">
+                    Факультет:
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Руководство производственной практикой:
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Норма часов по курсовым работам (2 курс):
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Норма часов по курсовым работам (3 курс):
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Норма часов по курсовым работам для ПО (2 курс):
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Норма часов по курсовым работам для ПО (3 курс):
+                </label>
+                <input name="Faculty" class="form-control" type="text">
+
+                <label class="control-label">
+                    Количество строк заявки в excel:
+                </label>
+                <input name="rowCount" class="form-control" type="text">
+
+                <button type="submit" class="btn btn-success">Upload</button>
+                @*<span class="form-text text-muted">Allowed file types:  xlsx, xls.</span>*@
+            </div>
+            @*<div class="card-footer">
+                <center>
+                    <button type="submit" class="btn btn-primary mr-2">Upload Users</button>
+                    <a asp-action="Index" asp-controller="Users" class="btn btn-secondary">Cancel</a>
+                </center>
+            </div>*@
+        </form>
+    </div>
+</div>
