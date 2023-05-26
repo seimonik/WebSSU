@@ -88,8 +88,8 @@ namespace WebSSU.Models
             worksheet.Cells[$"A{startRow}"].Value = "Наименование дисциплины";
 
             // Поворот текста на 90
-            worksheet.Cells[$"B{startRow + 1}:Y{startRow + 2}"].Style.TextRotation = 90;
-            worksheet.Cells[$"B{startRow + 1}:H{startRow + 2}"].Style.TextRotation = 90;
+            worksheet.Cells[$"I{startRow + 1}:Y{startRow + 2}"].Style.TextRotation = 90;
+            worksheet.Cells[$"B{startRow}:H{startRow + 2}"].Style.TextRotation = 90;
 
             // Слияние ячеек
             for (char c = 'B'; c <= 'H'; c++)
@@ -158,6 +158,7 @@ namespace WebSSU.Models
         public void PrintToExcelP(ExcelWorksheet worksheet, bool budget)
         {
             int row = 13;
+            int startRow = row;
             TotalHours totalHours = new TotalHours();
             foreach(KeyValuePair<string, SubjectList> sub in theme)
             {
@@ -282,6 +283,7 @@ namespace WebSSU.Models
                             totalHours.Total += Total;
 
                             subject.Name = sub.Key;
+                            subject.practice = true;
                         }
                         else
                         {
@@ -344,6 +346,8 @@ namespace WebSSU.Models
                 }
                 //row++;
             }
+            worksheet.Cells[$"A{startRow}:A{row}"].Style.WrapText = true;
+
             worksheet.Cells[$"A{row}"].Value = "Итого по " + faculty;
             totalHours.PrintToExcel(worksheet, row);
         }
@@ -376,7 +380,11 @@ namespace WebSSU.Models
                 worksheet.Cells[$"A{row}:Z{row}"].Merge = true;
                 PrintTableHeader(worksheet, false, ++row);
 
+                row += 5;
+
                 worksheet.Cells[$"A{++row}"].Value = faculty;
+
+                int startRow = row;
 
                 TotalHours totalHours = new TotalHours();
                 foreach (Subject subject in teacher.Value.Get())
@@ -487,7 +495,7 @@ namespace WebSSU.Models
                             totalHours.Coursework += int.Parse(note[0]) * StudentNumber;
                             totalHours.Total += int.Parse(note[0]) * StudentNumber;
                         }
-                        else if (subject.Name == "--//--")
+                        else if (subject.practice)//(subject.Name == "--//--")
                         {
                             worksheet.Cells[$"J{row}"].Value = subject.Seminars;
                             Total += subject.Seminars == null ? 0 : subject.Seminars.Value;
@@ -557,9 +565,12 @@ namespace WebSSU.Models
                         }
                         row++;
                     }
+                    worksheet.Cells[$"A{row}"].Value = "Итого по " + faculty;
+                    totalHours.PrintToExcel(worksheet, row);
                 }
 
-                row += 8;
+                worksheet.Cells[$"A{startRow}:A{row}"].Style.WrapText = true;
+
                 row++;
             }
         }

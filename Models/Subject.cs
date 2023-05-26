@@ -22,5 +22,6 @@ namespace WebSSU.Models
         public int? LoadPerWeek { get; set; }
         public string? ReportingForm { get; set; }
         public string? Remark { get; set; }
+        public bool practice { get; set; }
     }
 }
