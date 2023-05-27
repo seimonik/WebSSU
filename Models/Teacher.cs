@@ -7,11 +7,14 @@ namespace WebSSU.Models
 {
     public class Teacher
     {
-        public string? Name { get; set; }
-        public List<Subject> subjects { get; set; }
-        public Teacher()
+        public double Rate { get; set; }
+        public TotalHours AmountHoursBudget = new TotalHours();
+        public TotalHours AmountHoursCommercial = new TotalHours();
+
+        public Teacher() { }
+        public Teacher(double rate)
         {
-            subjects = new List<Subject>();
+            Rate = rate;
         }
     }
 }

@@ -16,3 +16,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+input:invalid {
+    border: 2px dashed red;
+}
+
+    input:invalid:required {
+        /*background-image: linear-gradient(to right, pink, lightgreen);*/
+        background-color: #fae1e1
+    }
+
+input:valid {
+    border: 2px solid black;
+}

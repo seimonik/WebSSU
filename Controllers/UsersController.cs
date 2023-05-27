@@ -51,6 +51,12 @@ namespace WebSSU.Controllers
                 var worksheetC1 = xlPackage.Workbook.Worksheets.Add("c1");
                 workload.PrintToExcelC(worksheetC1, true);
 
+                var worksheetC2 = xlPackage.Workbook.Worksheets.Add("c2");
+                workload.PrintToExcelC(worksheetC2, false);
+
+                var worksheetO1 = xlPackage.Workbook.Worksheets.Add("o1");
+                workload.PrintToExcelO(worksheetO1, false);
+
                 // set some core property values
                 xlPackage.Workbook.Properties.Title = "User List";
                 xlPackage.Workbook.Properties.Author = "WebSSU";
@@ -71,17 +77,16 @@ namespace WebSSU.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult BatchUserUpload(IFormFile batchUsers, string Faculty, string rowCount)
+        public IActionResult BatchUserUpload(IFormFile batchUsers, string Faculty, TimeNorms timeNorms, string rowCount, int specialtiesRow, int RateRow)
         {
             workload.faculty = Faculty;
+            workload.timeNorms = timeNorms;
 
             if (ModelState.IsValid)
             {
                 if (batchUsers?.Length > 0)
                 {
                     var stream = batchUsers.OpenReadStream();
-                    List<User> users = new List<User>();
-                    //List<Teacher> teachers = new List<Teacher>();
                     try
                     {
                         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -95,15 +100,6 @@ namespace WebSSU.Controllers
                             {
                                 try
                                 {
-                                    // НЕСКОЛЬКО СЕМЕСТРОВ
-                                    //List<int> semestrs = new List<int>();
-                                    //if (worksheet.Cells[row, 3].Value != null)
-                                    //{
-                                    //    foreach (string sem in worksheet.Cells[row, 3].Value.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries))
-                                    //    {
-                                    //        semestrs.Add(int.Parse(sem));
-                                    //    }
-                                    //}
                                     string nameTeacher = worksheet.Cells[row, 16].Value?.ToString() == null ? " " : worksheet.Cells[row, 16].Value.ToString();
                                     Subject subject = new Subject()
                                     {
@@ -127,8 +123,39 @@ namespace WebSSU.Controllers
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Something went wrong");
+                                    Console.WriteLine("Something went wrong"); // Вылавливание ошибки и вывод строки, в которой проихошла ошибка
                                 }
+                            }
+
+                            for (var row = specialtiesRow + 1; row <= specialtiesRow + 4; row++)
+                            {
+                                string[] line = worksheet.Cells[row, 1].Value.ToString().Split(":", StringSplitOptions.RemoveEmptyEntries);
+                                Dictionary<string, string> specializations = new Dictionary<string, string>();
+                                foreach (string specialization in line[1].Split(",", StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    string[] NameAndCode = specialization.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                                    specializations.Add(NameAndCode[0], NameAndCode[1]);
+                                }
+                                switch (row % specialtiesRow) {
+                                    case 1:
+                                        workload.Bachelor = specializations;
+                                        break;
+                                    case 2:
+                                        workload.Specialty = specializations;
+                                        break;
+                                    case 3:
+                                        workload.Magistracy = specializations;
+                                        break;
+                                    case 4:
+                                        workload.Postgraduate = specializations;
+                                        break;
+                                }
+                            }
+
+                            // Ставки преподавателей
+                            for (var row = RateRow + 1; worksheet.Cells[row, 1].Value != null; row++) {
+                                workload.teacherRate.Add(worksheet.Cells[row, 1].Value.ToString(), 
+                                    new Teacher(double.Parse(worksheet.Cells[row, 2].Value.ToString())));
                             }
                         }
                         return ExportToExcel();

@@ -5,44 +5,72 @@
                 <label class="control-label">
                     Upload File:
                 </label>
-                <input id="batchUsers" name="batchUsers" class="form-control" type="file" tabindex="14">
+                <input id="batchUsers" name="batchUsers" class="form-control" type="file" tabindex="14" required>
+
                 <label class="control-label">
                     Факультет:
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="Faculty" class="form-control" type="text" required>
+            </div>
 
+            <div class="form-group">
                 <label class="control-label">
                     Руководство производственной практикой:
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="ProductionPractice" class="form-control" type="text" required>
+
+                <label class="control-label">
+                    Руководство учебной практикой (НИР):
+                </label>
+                <input name="EducationalPractice" class="form-control" type="text" required>
 
                 <label class="control-label">
                     Норма часов по курсовым работам (2 курс):
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="Coursework2" class="form-control" type="text" required>
 
                 <label class="control-label">
                     Норма часов по курсовым работам (3 курс):
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="Coursework3" class="form-control" type="text" required>
 
                 <label class="control-label">
                     Норма часов по курсовым работам для ПО (2 курс):
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="Coursework2PO" class="form-control" type="text" required>
 
                 <label class="control-label">
                     Норма часов по курсовым работам для ПО (3 курс):
                 </label>
-                <input name="Faculty" class="form-control" type="text">
+                <input name="Coursework3PO" class="form-control" type="text" required>
+
+                <label class="control-label">
+                    Работы в ГЭК (бакалавриат):
+                </label>
+                <input name="ExaminationCommissionBachelor" class="form-control" type="text" required>
+
+                <label class="control-label">
+                    Работы в ГЭК (магистратура):
+                </label>
+                <input name="ExaminationCommissionMagistracy" class="form-control" type="text" required>
 
                 <label class="control-label">
                     Количество строк заявки в excel:
                 </label>
-                <input name="rowCount" class="form-control" type="text">
+                <input type="number" name="rowCount" class="form-control" type="text" min="1" max="5000" required>
+                
+                <label class="control-label">
+                    Строка, отвечающая за направления/специальности, реализуемые на факультете:
+                </label>
+                <input type="number" name="specialtiesRow" class="form-control" type="text" min="1" max="5000" required>
+
+                <label class="control-label">
+                    Строка, содержащая ставки:
+                </label>
+                <input type="number" name="RateRow" class="form-control" type="text" min="1" max="5000" required>
 
                 <button type="submit" class="btn btn-success">Upload</button>
-                @*<span class="form-text text-muted">Allowed file types:  xlsx, xls.</span>*@
+                <span class="form-text text-muted">Allowed file types:  xlsx</span>
             </div>
             @*<div class="card-footer">
                 <center>
