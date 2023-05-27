@@ -55,6 +55,7 @@ namespace WebSSU.Models
             if (subject.Name == "--//--")
             {
                 theme[LastSubjectName].Add(subject);
+                subject.Name = LastSubjectName;
             }
             else
             {
@@ -62,6 +63,7 @@ namespace WebSSU.Models
                 {
                     theme[subject.Name].Add(subject);
                     LastSubjectName = subject.Name;
+                    subject.practice = true;
                 }
                 else
                 {
@@ -326,7 +328,7 @@ namespace WebSSU.Models
                                 totalHours.Total += timeNorms.Coursework3 * StudentNumber;
                             }
                         }
-                        else if (subject.Name == "--//--")
+                        else if (subject.practice)
                         {
                             worksheet.Cells[$"J{row}"].Value = subject.Seminars;
                             Total += subject.Seminars == null ? 0 : subject.Seminars.Value;
@@ -389,6 +391,35 @@ namespace WebSSU.Models
                                 Total += subject.TotalHours == null ? 0 : subject.TotalHours.Value;
                                 totalHours.LeadershipGraduateStudents += subject.TotalHours ?? 0;
                             }
+
+                            // Итого часов
+                            worksheet.Cells[$"Z{row}"].Value = Total;
+                            totalHours.Total += Total;
+                        }
+                        else if (!subject.practice)
+                        {
+                            if (subject.ReportingForm == "зачет")
+                            {
+                                double zach = Math.Round(((double)StudentNumber / 3), 1, MidpointRounding.AwayFromZero);
+                                worksheet.Cells[$"O{row}"].Value = zach;
+                                Total += zach;
+                                totalHours.Test += zach;
+                            }
+                            else if (subject.ReportingForm == "экзамен")
+                            {
+                                double ekz = Math.Round(((double)StudentNumber / 2), 1, MidpointRounding.AwayFromZero);
+                                worksheet.Cells[$"M{row}"].Value = 2 * countFlow;
+                                worksheet.Cells[$"N{row}"].Value = ekz;
+                                Total += ekz + 2 * countFlow;
+                                totalHours.Exams += ekz;
+                                totalHours.Consultations += 2 * countFlow;
+                            }
+
+                            // Проверка контрольных работ
+                            double kr = Math.Round(((double)StudentNumber / 6), 1, MidpointRounding.AwayFromZero);
+                            worksheet.Cells[$"T{row}"].Value = kr;
+                            Total += kr;
+                            totalHours.ControlWorks += kr;
 
                             // Итого часов
                             worksheet.Cells[$"Z{row}"].Value = Total;
@@ -588,16 +619,17 @@ namespace WebSSU.Models
                     }
                     row++;
                 }
-                worksheet.Cells[$"A{row}"].Value = "Итого по " + faculty;
-                totalHours.PrintToExcel(worksheet, row);
-                if (budget)
-                {
-                    teacherRate[teacherName].AmountHoursBudget = totalHours;
-                }
-                else
-                {
-                    teacherRate[teacherName].AmountHoursCommercial = totalHours;
-                }
+
+            }
+            worksheet.Cells[$"A{row}"].Value = "Итого по " + faculty;
+            totalHours.PrintToExcel(worksheet, row);
+            if (budget)
+            {
+                teacherRate[teacherName].AmountHoursBudget.Add(totalHours);
+            }
+            else
+            {
+                teacherRate[teacherName].AmountHoursCommercial.Add(totalHours);
             }
         }
 
@@ -753,10 +785,15 @@ namespace WebSSU.Models
         {
             int row = 8;
             PrintTableHeaderO(worksheet, row);
-            row += 4;
+            row += 5;
             foreach(KeyValuePair<string, Teacher> teacher in teacherRate)
             {
                 TotalHours total = teacher.Value.AmountHoursBudget;
+                if (!budget)
+                {
+                    total = teacher.Value.AmountHoursCommercial;
+                }
+
                 worksheet.Cells[$"A{row}"].Value = teacher.Key;
                 worksheet.Cells[$"B{row}"].Value = "очн";
                 worksheet.Cells[$"C{row}"].Value = total.Lectures;

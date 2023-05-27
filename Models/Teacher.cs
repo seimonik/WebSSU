@@ -16,5 +16,13 @@ namespace WebSSU.Models
         {
             Rate = rate;
         }
+        public void AddAmountHoursBudget(TotalHours totalHours)
+        {
+            AmountHoursBudget.Add(totalHours);
+        }
+        public void AddAmountHoursCommercial(TotalHours totalHours)
+        {
+            AmountHoursCommercial.Add(totalHours);
+        }
     }
 }

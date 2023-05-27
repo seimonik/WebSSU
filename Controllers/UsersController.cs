@@ -55,7 +55,10 @@ namespace WebSSU.Controllers
                 workload.PrintToExcelC(worksheetC2, false);
 
                 var worksheetO1 = xlPackage.Workbook.Worksheets.Add("o1");
-                workload.PrintToExcelO(worksheetO1, false);
+                workload.PrintToExcelO(worksheetO1, true);
+
+                var worksheetO2 = xlPackage.Workbook.Worksheets.Add("o2");
+                workload.PrintToExcelO(worksheetO2, false);
 
                 // set some core property values
                 xlPackage.Workbook.Properties.Title = "User List";

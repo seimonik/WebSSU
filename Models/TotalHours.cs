@@ -74,5 +74,25 @@ namespace WebSSU.Models
             worksheet.Cells[$"X{row}"].Value = OptionalClasses;
             worksheet.Cells[$"Z{row}"].Value = Total;
         }
+        public void Add(TotalHours totalHours)
+        {
+            Lectures += totalHours.Lectures;
+            Seminars += totalHours.Seminars;
+            Laboratory += totalHours.Laboratory;
+            ConsultationsKSR += totalHours.ConsultationsKSR;
+            Consultations += totalHours.Consultations;
+            Exams += totalHours.Exams;
+            Test += totalHours.Test;
+            Practice += totalHours.Practice;
+            Coursework += totalHours.Coursework;
+            VKR += totalHours.VKR;
+            GAK += totalHours.GAK;
+            ControlWorks += totalHours.ControlWorks;
+            LeadershipGraduateStudents += totalHours.LeadershipGraduateStudents;
+            LeadershipApplicants += totalHours.LeadershipApplicants;
+            LeadershipMaster += totalHours.LeadershipMaster;
+            OptionalClasses += totalHours.OptionalClasses;
+            Total += totalHours.Total;
+        }
     }
 }
